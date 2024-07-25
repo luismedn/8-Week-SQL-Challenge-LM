@@ -7,7 +7,7 @@ Through these challenges, I demonstrate my proficiency in SQL, showcasing my abi
 
 ## 📚 Table of Contents
 
-- Case Study #1: Danny's Diner
+- Case Study #1: Danny's Diner (https://github.com/luismedn/8-Week-SQL-Challenge-LM/blob/11c39ccbf244b9fe9e0eafd1796cedf937ddb411/P/Case-Study-1)
 - Case Study #2: Pizza Runner
 - Case Study #3: Foodie-Fi
 - Case Study #4: Data Bank
