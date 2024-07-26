@@ -10,7 +10,7 @@
 It is important to mention that all the data related to the case study has been referenced from the following link: [here](https://8weeksqlchallenge.com/case-study-1/).
 
 ## Business Task
-Danny aims to utilize the data to answer a few straightforward questions regarding his customers, focusing particularly on their visiting patterns, the amount of money they’ve spent, and their favorite menu items.
+Danny seeks to use the data to answer key questions about his restaurant's customers, focusing on how often they visit, how much they spend, and which dishes they enjoy most. 🍣🍛🍜
 
 ***
 
