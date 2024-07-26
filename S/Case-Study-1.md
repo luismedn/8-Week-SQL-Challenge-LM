@@ -27,7 +27,7 @@ Danny seeks to use the data to answer key questions about his restaurant's custo
 ````sql
 SELECT 
   sales.customer_id, 
-  SUM(menu.price) AS total_revenue
+  SUM(menu.price) AS total_sales
 FROM 
   dannys_diner.sales
 JOIN 
