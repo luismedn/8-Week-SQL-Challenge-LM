@@ -30,7 +30,7 @@ SELECT
   SUM(menu.price) AS total_sales
 FROM 
   dannys_diner.sales
-JOIN 
+INNER JOIN 
   dannys_diner.menu
 ON 
   sales.product_id = menu.product_id
