@@ -61,3 +61,4 @@ This shows the customer_id alongside the total_sales for each customer, based on
 - Customer B spent $74.
 - Customer C spent $36.
 ***
+**2. How many days has each customer visited the restaurant?**
