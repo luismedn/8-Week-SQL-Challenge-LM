@@ -60,5 +60,32 @@ This shows the customer_id alongside the total_sales for each customer, based on
 - Customer A spent $76.
 - Customer B spent $74.
 - Customer C spent $36.
+
 ***
+
 **2. How many days has each customer visited the restaurant?**
+
+````sql
+SELECT 
+  customer_id, 
+  COUNT(DISTINCT order_date) AS visit_count
+FROM dannys_diner.sales
+GROUP BY customer_id;
+````
+
+#### Steps:
+- SELECT Statement: We begin by selecting two columns: customer_id and the count of distinct order_date.
+- COUNT(DISTINCT order_date): This function counts the unique dates on which each customer has placed an order, thereby representing their visit days.
+- FROM Clause: The data is sourced from the dannys_diner.sales table, which contains records of customer orders.
+- GROUP BY Clause: Finally, we group the results by customer_id to ensure that the visit count is calculated for each customer individually.
+
+#### Answer:
+| customer_id | visit_count |
+| ----------- | ----------- |
+| A           | 4          |
+| B           | 6          |
+| C           | 2          |
+
+- Customer A visited 4 times.
+- Customer B visited 6 times.
+- Customer C visited 2 times.
