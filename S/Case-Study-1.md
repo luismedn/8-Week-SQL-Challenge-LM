@@ -89,3 +89,84 @@ GROUP BY customer_id;
 - Customer A visited 4 times.
 - Customer B visited 6 times.
 - Customer C visited 2 times.
+
+***
+
+**3. What was the first item from the menu purchased by each customer?**
+
+````sql
+WITH ordered_sales AS (
+  SELECT 
+    s.customer_id, 
+    s.order_date, 
+    m.product_name,
+    DENSE_RANK() OVER (
+      PARTITION BY s.customer_id 
+      ORDER BY s.order_date
+    ) AS rank
+  FROM 
+    dannys_diner.sales s
+  INNER JOIN 
+    dannys_diner.menu m ON s.product_id = m.product_id
+)
+
+SELECT DISTINCT
+  customer_id, 
+  product_name
+FROM 
+  ordered_sales
+WHERE 
+  rank = 1;
+````
+
+#### Step-by-Step Breakdown:
+Step 1: Organize and Rank Purchases
+First, The WITH clause to create a temporary table called ordered_sales to organize all the sales:
+````sql
+WITH ordered_sales AS (
+  SELECT 
+    s.customer_id, 
+    s.order_date, 
+    m.product_name,
+    DENSE_RANK() OVER (
+      PARTITION BY s.customer_id 
+      ORDER BY s.order_date
+    ) AS rank
+  FROM 
+    dannys_diner.sales s
+  INNER JOIN 
+    dannys_diner.menu m ON s.product_id = m.product_id
+)
+````
+Here’s what’s happening in this part:
+
+customer_id: I'm grabbing the customer ID from the sales table.
+order_date: This helps me determine the order in which the customer made their purchases.
+product_name: I join the menu table to get the names of the products the customer bought.
+DENSE_RANK(): This function is key because it lets me rank each customer’s purchases by their visit date. The first visit gets rank 1, and any items bought during that visit share the same rank.
+
+Step 2: Filtering for First Visits
+
+Now that I’ve ranked each customer’s purchases by date, I’ll filter out only those purchases that occurred on their first visit (rank = 1). I use DISTINCT to make sure I don’t list the same item multiple times if they bought it more than once on that visit.
+
+````sql
+SELECT DISTINCT
+  customer_id, 
+  product_name
+FROM 
+  ordered_sales
+WHERE 
+  rank = 1;
+````
+DISTINCT: This ensures that if a customer bought the same item twice on their first visit, it only shows up once.
+WHERE rank = 1: I’m filtering to only show the products that were purchased on the first visit.
+
+This query returns a list of customers along with the unique items they bought on their first visit. If a customer bought multiple items on that visit, all of those will be shown. However, the same item won’t be repeated if purchased multiple times on the same day.
+
+#### Answer:
+| customer_id | product_name | 
+| ----------- | ----------- |
+| A           | curry        | 
+| A           | sushi        | 
+| B           | curry        | 
+| C           | ramen        |
