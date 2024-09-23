@@ -170,3 +170,7 @@ This query returns a list of customers along with the unique items they bought o
 | A           | sushi        | 
 | B           | curry        | 
 | C           | ramen        |
+
+- Customer A placed an order for both curry and sushi simultaneously, making them the first items in the order.
+- Customer B's first order is curry.
+- Customer C's first order is ramen.
