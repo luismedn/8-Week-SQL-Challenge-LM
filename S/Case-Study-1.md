@@ -204,3 +204,48 @@ Using COUNT() to calculate how many times each product was purchased and then so
 ***
 
 **5. Which item was the most popular for each customer?**
+
+````sql
+WITH most_popular AS (
+  SELECT 
+    sales.customer_id, 
+    menu.product_name, 
+    COUNT(menu.product_id) AS order_count,
+    DENSE_RANK() OVER (
+      PARTITION BY sales.customer_id 
+      ORDER BY COUNT(sales.customer_id) DESC) AS rank
+  FROM dannys_diner.menu
+  INNER JOIN dannys_diner.sales
+    ON menu.product_id = sales.product_id
+  GROUP BY sales.customer_id, menu.product_name
+)
+
+SELECT 
+  customer_id, 
+  product_name, 
+  order_count
+FROM most_popular 
+WHERE rank = 1;
+````
+
+#### Steps:
+1. Common Table Expression (CTE) most_popular:
+This part of the query calculates how many times each customer ordered each item using the COUNT() function on menu.product_id.
+I use the DENSE_RANK() window function to rank the items in descending order of how often they were ordered (ORDER BY COUNT(sales.customer_id) DESC).
+The PARTITION BY sales.customer_id ensures that the ranking is reset for each customer, so the items are ranked separately for every customer.
+2. Main Query:
+The main query then filters the most_popular CTE to only return the item with a rank = 1 for each customer, which corresponds to their most frequently purchased item.
+
+
+#### Answer:
+| customer_id | product_name | order_count |
+| ----------- | ---------- |------------  |
+| A           | ramen        |  3   |
+| B           | sushi        |  2   |
+| B           | curry        |  2   |
+| B           | ramen        |  2   |
+| C           | ramen        |  3   |
+
+Customer A purchased ramen 3 times, making it their most popular item.
+Customer B has three items (sushi, curry, and ramen) that were all purchased 2 times each. Since all of these have the same purchase count, they are tied as the most popular items for Customer B.
+Customer C purchased ramen 3 times, which is their most frequently ordered item.
