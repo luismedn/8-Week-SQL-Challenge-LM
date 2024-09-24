@@ -174,3 +174,22 @@ This query returns a list of customers along with the unique items they bought o
 - Customer A placed an order for both curry and sushi simultaneously, making them the first items in the order.
 - Customer B's first order is curry.
 - Customer C's first order is ramen.
+
+***
+
+**4. What is the most purchased item on the menu and how many times was it purchased by all customers?**
+
+````sql
+SELECT 
+  menu.product_name,
+  COUNT(sales.product_id) AS most_purchased_item
+FROM dannys_diner.sales
+INNER JOIN dannys_diner.menu
+  ON sales.product_id = menu.product_id
+GROUP BY menu.product_name
+ORDER BY most_purchased_item DESC
+LIMIT 1;
+````
+
+#### Steps:
+
