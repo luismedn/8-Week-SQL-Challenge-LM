@@ -193,3 +193,14 @@ LIMIT 1;
 
 #### Steps:
 
+Using COUNT() to calculate how many times each product was purchased and then sort the results using ORDER BY in descending order. The LIMIT 1 clause ensures that only the most purchased item is retrieved. This allows us to quickly find the most popular menu item and how often it was ordered.
+
+#### Answer:
+| most_purchased | product_name | 
+| ----------- | ----------- |
+| 8       | ramen |
+
+
+***
+
+**5. Which item was the most popular for each customer?**
