@@ -249,3 +249,43 @@ The main query then filters the most_popular CTE to only return the item with a 
 Customer A purchased ramen 3 times, making it their most popular item.
 Customer B has three items (sushi, curry, and ramen) that were all purchased 2 times each. Since all of these have the same purchase count, they are tied as the most popular items for Customer B.
 Customer C purchased ramen 3 times, which is their most frequently ordered item.
+
+***
+
+**6. Which item was purchased first by the customer after they became a member?**
+
+```sql
+WITH joined_as_member AS (
+  SELECT
+    members.customer_id, 
+    sales.product_id,
+    ROW_NUMBER() OVER (
+      PARTITION BY members.customer_id
+      ORDER BY sales.order_date) AS row_num
+  FROM dannys_diner.members
+  INNER JOIN dannys_diner.sales
+    ON members.customer_id = sales.customer_id
+    AND sales.order_date > members.join_date
+)
+
+SELECT 
+  customer_id, 
+  product_name 
+FROM joined_as_member
+INNER JOIN dannys_diner.menu
+  ON joined_as_member.product_id = menu.product_id
+WHERE row_num = 1
+ORDER BY customer_id ASC;
+```
+
+WITH clause (joined_as_member):
+
+This part of the query creates a temporary result set where we join the members and sales tables.
+We use the INNER JOIN to link members with sales based on the customer_id.
+The additional condition sales.order_date > members.join_date ensures we only consider sales that happened after the customer joined as a member.
+We then use the ROW_NUMBER() window function to assign a unique row number (row_num) to each purchase for each customer, ordered by the order_date (oldest to newest). The PARTITION BY ensures that the row numbering is reset for each customer.
+Main Query:
+
+After creating the temporary table, we join it with the menu table to get the product_name corresponding to the product_id from the sales data.
+The WHERE row_num = 1 clause ensures we only select the first purchase (the one with the lowest row number) for each customer.
+Finally, the ORDER BY customer_id ASC sorts the results by customer ID.
