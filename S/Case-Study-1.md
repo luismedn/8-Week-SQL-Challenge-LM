@@ -302,3 +302,45 @@ Finally, the ORDER BY customer_id ASC sorts the results by customer ID.
 ***
 
 **7. Which item was purchased just before the customer became a member?**
+
+````sql
+WITH purchases_before_membership AS (
+  SELECT
+    members.customer_id, 
+    sales.product_id,
+    ROW_NUMBER() OVER (
+      PARTITION BY members.customer_id
+      ORDER BY sales.order_date DESC) AS row_num
+  FROM dannys_diner.sales
+  INNER JOIN dannys_diner.members
+    ON sales.customer_id = members.customer_id
+  WHERE sales.order_date < members.join_date
+)
+
+SELECT 
+  customer_id, 
+  product_name
+FROM purchases_before_membership
+INNER JOIN dannys_diner.menu
+  ON purchases_before_membership.product_id = menu.product_id
+WHERE row_num = 1
+ORDER BY customer_id ASC;
+````
+
+The query uses ROW_NUMBER() to rank purchases made before the customer became a member based on the order_date, ensuring that we only retrieve the last purchase.
+The order_date is still used for ordering within the WITH clause, but it is not included in the final output.
+The final result contains only the customer_id and the product_name of the item purchased just before becoming a member.
+
+#### Output:
+
+| customer_id | product_name |
+| ----------- | ---------- |
+| A           | sushi        |
+| B           | sushi        |
+
+
+Customer A and Customer B both purchased sushi as their last item before joining the membership.
+
+***
+
+**8. What is the total items and amount spent for each member before they became a member?**
