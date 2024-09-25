@@ -327,9 +327,17 @@ WHERE row_num = 1
 ORDER BY customer_id ASC;
 ````
 
-The query uses ROW_NUMBER() to rank purchases made before the customer became a member based on the order_date, ensuring that we only retrieve the last purchase.
-The order_date is still used for ordering within the WITH clause, but it is not included in the final output.
-The final result contains only the customer_id and the product_name of the item purchased just before becoming a member.
+1. WITH clause (purchases_before_membership):
+
+We join the sales and members tables using the customer_id. This allows us to match customers' sales with their membership details.
+The WHERE sales.order_date < members.join_date condition ensures that only purchases made before the customer joined the membership are considered.
+The ROW_NUMBER() function assigns a rank to each purchase for every customer, ordering the purchases by sales.order_date in descending order. This means the most recent purchase before becoming a member is ranked 1.
+
+2. Main Query:
+
+The main query selects the rows where row_num = 1, meaning it retrieves only the most recent purchase before the customer became a member.
+It then joins the result with the menu table to get the product_name corresponding to the product_id from the sales table.
+The ORDER BY customer_id ASC ensures the results are listed by customer ID.
 
 #### Output:
 
