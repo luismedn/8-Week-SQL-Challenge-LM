@@ -289,3 +289,16 @@ Main Query:
 After creating the temporary table, we join it with the menu table to get the product_name corresponding to the product_id from the sales data.
 The WHERE row_num = 1 clause ensures we only select the first purchase (the one with the lowest row number) for each customer.
 Finally, the ORDER BY customer_id ASC sorts the results by customer ID.
+
+#### Answer:
+| customer_id | product_name |
+| ----------- | ---------- |
+| A           | ramen        |
+| B           | sushi        |
+
+- Customer A's first order as a member is ramen.
+- Customer B's first order as a member is sushi.
+
+***
+
+**7. Which item was purchased just before the customer became a member?**
